@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Recipewind",
+    "slug": "Recipewind",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "Recipewind"
+}
