@@ -1,5 +1,4 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screen/Auth/Login.Screen';
 import RegistrationScreen from '../screen/Auth/Registration.Screen';
 import ForgotPasswordScreen from '../screen/Auth/ForgotPassword.Screen';
@@ -7,6 +6,7 @@ import ResetPasswordScreen from '../screen/Auth/ResetPassword.Screen';
 import CodeScreen from '../screen/Auth/Code.Screen';
 import HomeScreen from '../screen/Home/Home.Screen';
 
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const AuthStack = createNativeStackNavigator();
 
 const AuthStackNav = () => {

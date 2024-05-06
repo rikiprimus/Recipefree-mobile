@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { TextInput, View, Text } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import useSearchData from "../util/useSearchData";
 
-const InputHeader = ({ onPress, onSubmit }) => {
-  const [searchText, setSearchText] = useState("");
+const InputHeader = ({ onSubmit }) => {
+  const { detailSearch, updateSearchQuery  } = useSearchData();
+  const [searchText, setSearchText] = useState(detailSearch.search);
+
+  const handleSubmit = async () => {
+    updateSearchQuery({ ...detailSearch, search: searchText });
+    onSubmit() 
+  };
 
   return (
     <View className="w-full flex flex-col gap-y-6">
@@ -12,14 +19,15 @@ const InputHeader = ({ onPress, onSubmit }) => {
         placeholder="Search Pasta, Bread, etc"
         value={searchText}
         onChangeText={(textInput) => setSearchText(textInput)}
-        onSubmitEditing={onSubmit}
+        onSubmitEditing={handleSubmit}
       />
-      <Ionicons
-        name="search"
-        size={25}
-        color="#C4C4C4"
-        className="absolute py-3 pl-5 pr-3 top-2"
-      />
+      <View className='absolute py-3 pl-5 pr-3 top-2'>
+        <Ionicons 
+          name="search"
+          size={25} 
+          color='#C4C4C4' 
+        />
+      </View>
     </View>
   );
 };

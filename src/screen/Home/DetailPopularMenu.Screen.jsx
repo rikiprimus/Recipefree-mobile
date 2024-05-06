@@ -5,72 +5,58 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
-  TouchableHighlight,
+  ActivityIndicator,
+  RefreshControl,
 } from "react-native";
-import Pizza from "../../assets/pizza.jpg";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import axios from 'axios';
+import api from "../../util/api";
 
 const DetailPopularMenuScreen = ({ navigation }) => {
-  // const popular = [
-  //   {
-  //     image: Pizza,
-  //     title: "Pizza",
-  //     user_name: "Bianca",
-  //     bookmarked: true,
-  //     liked: false,
-  //   },
-  //   {
-  //     image: Pizza,
-  //     title: "Pizza",
-  //     user_name: "Bianca",
-  //     bookmarked: false,
-  //     liked: false,
-  //   },
-  //   {
-  //     image: Pizza,
-  //     title: "Pizza",
-  //     user_name: "Bianca",
-  //     bookmarked: true,
-  //     liked: true,
-  //   },
-  //   {
-  //     image: Pizza,
-  //     title: "Pizza",
-  //     user_name: "Bianca",
-  //     bookmarked: true,
-  //     liked: false,
-  //   },
-  // ];
+  const [isLoading, setIsLoading] = useState(true);
+  const [popular, setPopular] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  const base_url = "https://recipefree.vercel.app";
-  const [popular, setPopular] = useState([])
-  async function getData () {
-    try {
-      let res = await axios.get(`${base_url}/recipes`)
-      console.log(res.data.data)
-      setPopular(res.data.data)
-    } catch(err){
-      console.log(err)
-    }
-  }
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
-    getData()
-    console.log('=======================')
-  })
+    const fetchData = async () => {
+      try {
+        const data = await api.get("recipes");
+        setPopular(data.data);
+        setIsLoading(false);
+        console.log(data.data);
+      } catch (error) {
+        console.error("Error fetching :", error);
+      }
+    };
+
+    fetchData();
+    console.log("=======================");
+  }, []);
 
   const renderSeparator = () => <View style={{ height: 25 }} />;
 
   const renderPopular = ({ item, bookmarked }) => (
     <View>
       <View className="w-full flex flex-row gap-x-4 justify-between items-center">
-        <TouchableOpacity 
+        <TouchableOpacity
           className="flex flex-row gap-x-4 items-center"
-          onPress={() => navigation.navigate('DetailsRecipe')}
+          onPress={() =>
+            navigation.navigate("DetailsRecipe", {
+              id: item.id,
+            })
+          }
         >
-          <Image source={{ uri: item.photo }} className="rounded-lg w-[70] h-[70]" />
-          <View className="w-[150px] flex flex-col gap-y-1">
+          <Image
+            source={{ uri: item.photo }}
+            className="rounded-lg w-[70] h-[70]"
+          />
+          <View className="w-[120px] flex flex-col gap-y-1">
             <Text className="font-semibold text-xl">{item.title}</Text>
             <View className="flex flex-row items-center gap-x-2">
               <Ionicons name="person-outline" color="orange" size={22} />
@@ -97,14 +83,14 @@ const DetailPopularMenuScreen = ({ navigation }) => {
           )}
 
           {item?.liked === false ? (
-            <TouchableOpacity 
+            <TouchableOpacity
               className="bg-white p-2 border-2 border-yellow rounded-full"
               // onPress={}
             >
               <Ionicons name="thumbs-up-outline" color="orange" size={25} />
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity 
+            <TouchableOpacity
               className="bg-yellow p-2 border-2 border-yellow rounded-full"
               // onPress={}
             >
@@ -118,18 +104,26 @@ const DetailPopularMenuScreen = ({ navigation }) => {
 
   return (
     <View className="w-full flex-1 gap-y-6 bg-white pt-4 px-5">
-      {/* input search  */}
+      {/* Header back  */}
       <View className="flex flex-row justify-start items-center pt-3 px-4">
-        <TouchableOpacity 
-          className='bg-[#F8F8FA] p-4 rounded-lg'
-          onPress={() => navigation.navigate('Home')}  
+        <TouchableOpacity
+          className="bg-[#F8F8FA] p-4 rounded-lg"
+          onPress={() => navigation.navigate("Home")}
         >
-          <Ionicons name="chevron-back-outline" size={25} className='text-[#18172B]' />
+          <Ionicons
+            name="chevron-back-outline"
+            size={25}
+            className="text-[#18172B]"
+          />
         </TouchableOpacity>
-        <Text className='font-semibold text-2xl text-yellow pl-14'>Popular Menu</Text>
+        <Text className="font-semibold text-2xl text-yellow pl-14">
+          Popular Menu
+        </Text>
       </View>
       {/* file  */}
-      <View className="w-full">
+      {isLoading ? (
+        <ActivityIndicator size={30} color="#EFC81A" />
+      ) : (
         <FlatList
           data={popular}
           renderItem={renderPopular}
@@ -137,8 +131,12 @@ const DetailPopularMenuScreen = ({ navigation }) => {
           vertical
           showsHorizontalScrollIndicator={false}
           ItemSeparatorComponent={renderSeparator}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
-      </View>
+      )}
     </View>
   );
 };
