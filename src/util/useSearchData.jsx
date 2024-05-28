@@ -8,7 +8,7 @@ const useSearchData = () => {
     searchBy: 'ingredient',
     search: '',
     sortBy: 'createdAt',
-    sort: 'ASC',
+    sort: 'DESC',
     limit: '20',
     page: '1',
   });

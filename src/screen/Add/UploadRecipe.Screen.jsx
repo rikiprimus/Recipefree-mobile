@@ -52,6 +52,7 @@ const UploadRecipeScreen = ({ navigation }) => {
       });
       
       console.log('Resep berhasil dibuat:', response.data);
+      navigation.navigate('Home')
 
       // Reset form jika diperlukan
       // setTitle('');
