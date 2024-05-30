@@ -19,7 +19,6 @@ const authApi = {
 
       return response.data;
     } catch (error) {
-      console.error('Error logging in:', error?.response?.data?.messages);
       return error?.response?.data; 
     }
   },
@@ -34,8 +33,46 @@ const authApi = {
       });
       return response.data; // Mengembalikan data pengguna yang sudah login
     } catch (error) {
-      console.error('Error register:', error);
-      return error; // Registrasi gagal
+      return error?.response?.data; 
+    }
+  },
+
+  sendpin: async (credentials) => {
+    try {
+      const response = await axios.post(apiUrl + '/auth/sendpin', credentials, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      await AsyncStorage.setItem('emailpin', credentials.email);
+      return response.data; // Mengembalikan data pengguna yang sudah login
+    } catch (error) {
+      return error?.response?.data; 
+    }
+  },
+  confirmpin: async (credentials) => {
+    try {
+      const response = await axios.post(apiUrl + '/auth/confirmpin', credentials, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log(response.data)
+      return response.data; // Mengembalikan data pengguna yang sudah login
+    } catch (error) {
+      return error?.response?.data; 
+    }
+  },
+  changepassword: async (credentials) => {
+    try {
+      const response = await axios.post(apiUrl + '/auth/changepasswordbyemail', credentials, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      return response.data; // Mengembalikan data pengguna yang sudah login
+    } catch (error) {
+      return error?.response?.data; 
     }
   },
 
@@ -47,10 +84,11 @@ const authApi = {
       await AsyncStorage.removeItem('isSigned');
       return true; // Berhasil logout
     } catch (error) {
-      console.error('Error logging out:', error);
       return false; // Gagal logout
     }
   },
+
+  
 
   // Fungsi untuk mendapatkan data pengguna yang sudah login
   getUserData: async () => {
@@ -66,7 +104,6 @@ const authApi = {
         return null;
       }
     } catch (error) {
-      console.error('Error getting user data:', error);
       return null;
     }
   }
