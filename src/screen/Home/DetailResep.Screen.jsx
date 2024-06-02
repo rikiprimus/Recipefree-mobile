@@ -15,14 +15,12 @@ const DetailResepScreen = ({navigation, route}) => {
         const data = await api.getById("recipes", id);
         setRecipe(data.data);
         setIsLoading(false);
-        console.log(data.data);
       } catch (error) {
         console.error("Error fetching By Id :", error);
       }
     };
 
     fetchDataById();
-    console.log("=======================");
   }, []);
 
   const ingredientData = recipe?.ingredient?.split(', ');

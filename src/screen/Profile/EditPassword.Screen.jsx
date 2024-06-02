@@ -1,9 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Input from "../../components/Input";
+import { useAuth } from "../../util/authContext";
+import ButtonY from "../../components/ButtonY";
 
 const EditPasswordScreen = ({ navigation }) => {
+  const { changePassword, logout, dataUser } = useAuth();
+  const [data, setData] = useState({
+    email: dataUser.email,
+    password: "",
+    confirmpassword: "",
+  });
+
+  const handleInputChange = (name, value) => {
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handlePress = async () => {
+    const res = await changePassword(data);
+    if (res.status === 201) {
+      logout()
+    } else {
+      setData((prevData) => ({
+        ...prevData,
+        password: "",
+        confirmpassword: "",
+      }));
+    }
+  };
+
   return (
     <View className="w-full flex-1 gap-y-6 bg-white pt-4 px-5">
       {/* Header back  */}
@@ -25,24 +54,29 @@ const EditPasswordScreen = ({ navigation }) => {
       {/* Input Password  */}
       <View className="flex flex-col gap-y-4">
         <View>
-          <Input placeholder="Old Password" nameicon="lock-closed-outline" />
-        </View>
-        <View>
-          <Input placeholder="New Password" nameicon="lock-closed-outline" />
+          <Input
+            placeholder="Create New Password"
+            nameicon="lock-closed-outline"
+            value={data.password}
+            onChangeText={(value) => handleInputChange("password", value)}
+            secureTextEntry={true}
+          />
         </View>
         <View>
           <Input
-            placeholder="Confirm Password"
+            placeholder="Password"
             nameicon="lock-closed-outline"
+            value={data.confirmpassword}
+            onChangeText={(value) =>
+              handleInputChange("confirmpassword", value)
+            }
+            secureTextEntry={true}
           />
         </View>
       </View>
-      <TouchableOpacity
-        className="flex items-center p-4 rounded-lg bg-yellow"
-        onPress={() => navigation.navigate("MyProfile")}
-      >
-        <Text className="text-base font-bold text-[#fff]">Change Password</Text>
-      </TouchableOpacity>
+      <View>
+        <ButtonY onPress={handlePress}>Change Password</ButtonY>
+      </View>
     </View>
   );
 };

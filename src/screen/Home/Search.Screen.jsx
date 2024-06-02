@@ -9,33 +9,51 @@ import {
   RefreshControl,
 } from "react-native";
 import InputHeader from "../../components/InputHeader";
-import Pizza from "../../assets/pizza.jpg";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import useSearchData from "../../util/useSearchData";
 
-const SearchScreen = ({navigation}) => {
-  const { dataSearch, isLoading, setIsLoading } = useSearchData();
+const SearchScreen = ({ navigation, route }) => {
+  const { resultSearch, setResultSearch, isLoading, setIsLoading, setDetailSearch, fetchSearchData } = useSearchData();
+  const query = route.params?.query || '';
 
-  const onRefresh = () => {
-    setIsLoading(true)
-    setTimeout(() => {
+  useEffect(() => {
+    if (query) {
+      setDetailSearch((prevData) => ({
+        ...prevData,
+        search: query,
+      }));
+      fetchSearchData();
+    }
+  }, [query]);
+
+  const handleSearchSubmit = (searchText) => {
+    setIsLoading(true);
+    setDetailSearch((prevData) => ({
+      ...prevData,
+      search: searchText,
+    }));
+    setResultSearch([])
+    fetchSearchData().then(() => {
       setIsLoading(false);
-    }, 2000); // Contoh: menghentikan tanda loading setelah 2 detik
+    });
   };
 
-  console.log(dataSearch)
-  
   const renderSeparator = () => <View style={{ height: 25 }} />;
 
   const renderSearch = ({ item }) => (
     <View>
-      <TouchableOpacity 
+      <TouchableOpacity
         className="w-full flex flex-row gap-x-4 items-center"
-        onPress={() => navigation.navigate("DetailsRecipe", {
-          id: item.id,
-        })}
+        onPress={() =>
+          navigation.navigate("DetailsRecipe", {
+            id: item.id,
+          })
+        }
       >
-        <Image source={{uri: item.photo}} className="rounded-lg w-[70] h-[70]" />
+        <Image
+          source={{ uri: item.photo }}
+          className="rounded-lg w-[70] h-[70]"
+        />
         <View className="flex flex-col gap-y-1">
           <Text className="font-semibold text-lg">{item.title}</Text>
           <View className="flex flex-row items-center gap-x-2">
@@ -50,23 +68,19 @@ const SearchScreen = ({navigation}) => {
     </View>
   );
 
-  const onSubmitSearch = async () => {
-    onRefresh()
-  }
-
   return (
     <View className="w-full flex-1 items-center gap-y-6 bg-white pt-4 px-5">
       {/* input search  */}
       <View className="w-full pt-3">
-        <InputHeader onSubmit={onSubmitSearch} />
+        <InputHeader onSubmit={handleSearchSubmit} />
       </View>
       {/* file  */}
       <View className="w-full">
-        {isLoading? (
+        {isLoading ? (
           <ActivityIndicator size={30} color="#EFC81A" />
         ) : (
           <FlatList
-            data={dataSearch}
+            data={resultSearch}
             renderItem={renderSearch}
             keyExtractor={(item, index) => index.toString()}
             vertical
@@ -74,6 +88,8 @@ const SearchScreen = ({navigation}) => {
             ItemSeparatorComponent={renderSeparator}
           />
         )}
+
+        
       </View>
     </View>
   );

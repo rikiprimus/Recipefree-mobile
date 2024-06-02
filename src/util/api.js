@@ -3,22 +3,18 @@ import axios from 'axios';
 const apiUrl = 'https://recipefree.vercel.app'
 
 const api = {
-  add: async (endpoint, formData, token) => {
+  add: async (endpoint, formData) => {
     try {
       const response = await axios.post(apiUrl+ `/${endpoint}`, formData, {
-        headers: {
-          'Content-Type': 'application/form-data',
-          'Authorization': `Bearer ${token}`
-        }
+        headers:{"Accept":"application/json, text/plain, /","Content-Type": "multipart/form-data"}
       });
-      return response; 
+      return response.data; 
     } catch (error) {
-      console.error('Error adding data:', error);
-      return error; // Produk gagal ditambahkan
+      console.error("error : ", error?.response)
+      return error?.response?.data
     }
   },
 
-  // Fungsi untuk mengambil informasi semua data
   get: async (endpoint) => {
     try {
       const response = await axios.get(apiUrl+ `/${endpoint}`);
@@ -26,19 +22,22 @@ const api = {
       return response.data; 
     } catch (error) {
       console.error('Error get data:', error);
-      return error; // Produk gagal ditambahkan
+      return error; 
     }
   },
 
-  // Fungsi untuk mengambil informasi berdasarkan ID
-  getById: async (endpoint, id) => {
+  getById: async (endpoint, id, token) => {
     try {
-      const response = await axios.get(apiUrl+ `/${endpoint}/${id}`);
+      const response = await axios.get(apiUrl+ `/${endpoint}/${id}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }); 
       console.log('get by id success')
       return response.data; 
     } catch (error) {
-      console.error('Error get data by id:', error);
-      return error; // Produk gagal ditambahkan
+      console.error('Error get data by id:', error?.response?.data);
+      return error?.response?.data; 
     }
   },
 
@@ -53,39 +52,59 @@ const api = {
       return response.data; 
     } catch (error) {
       console.error('Error get data detail:', error);
-      return error; // Produk gagal ditambahkan
+      return error?.response?.data; 
     }
   },
 
-  // Fungsi untuk memperbarui informasi produk
-  update: async (endpoint, formData, token) => {
+  
+  update: async (endpoint, form, id, token) => {
     try {
-      const response = await axios.put(apiUrl+ `/${endpoint}`, formData, {
+      const response = await axios.put(`${apiUrl}/${endpoint}/${id}`, form, {
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response; 
+    } catch (error) {
+      console.error('Error api updating data:', error?.response?.data);
+      return error?.response?.data; 
+    }
+  },
+
+  updatephoto: async (endpoint, photo, id, token) => {
+    try {
+      const formData = new FormData();
+      formData.append("photo_profile", {
+        uri: photo.uri,
+        name: photo.fileName || "photo.jpg",
+        type: photo.type || "image/jpeg",
+      });
+      const response = await axios.put(`${apiUrl}/${endpoint}/${id}`, formData, {
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          "Content-Type": "multipart/form-data",
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.data; 
+    } catch (error) {
+      console.error('Error api updating photo:', error?.request);
+      return error?.response?.data; 
+    }
+  },
+
+  delete: async (endpoint, id) => {
+    try {
+      const response = await axios.delete(apiUrl+ `/${endpoint}/${id}`, {
         headers: {
           'Content-Type': 'application/form-data',
-          'Authorization': `Bearer ${token}`
         }
       });
       return response; 
     } catch (error) {
-      console.error('Error update data:', error);
-      return error; // Produk gagal ditambahkan
-    }
-  },
-
-  // Fungsi untuk menghapus produk berdasarkan ID
-  deleteProduct: async (endpoint, formData, token) => {
-    try {
-      const response = await axios.delete(apiUrl+ `/${endpoint}`, formData, {
-        headers: {
-          'Content-Type': 'application/form-data',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      return response; 
-    } catch (error) {
-      console.error('Error update data:', error);
-      return error; // Produk gagal ditambahkan
+      console.error('Error delete data:', error);
+      return error?.response?.data; 
     }
   }
 };

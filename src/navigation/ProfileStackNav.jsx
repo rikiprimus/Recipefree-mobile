@@ -7,20 +7,34 @@ import SavedRecipeScreen from '../screen/Profile/SavedRecipe.Screen';
 import LikedRecipeScreen from '../screen/Profile/LikedRecipe.Screen';
 import EditPhotoScreen from '../screen/Profile/EditPhoto.Screen';
 import EditPasswordScreen from '../screen/Profile/EditPassword.Screen';
+import DetailResepScreen from '../screen/Home/DetailResep.Screen';
 
-const HomeStack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
 
 const ProfileStackNav = () => {
   return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen name="MyProfile" component={ProfileScreen} options={{headerShown:false}} />
-      <HomeStack.Screen name="EditProfile" component={EditProfileScreen} options={{headerShown:false}} />
-      <HomeStack.Screen name="EditPhoto" component={EditPhotoScreen} options={{headerShown:false}} />
-      <HomeStack.Screen name="EditPassword" component={EditPasswordScreen} options={{headerShown:false}} />
-      <HomeStack.Screen name="MyRecipe" component={MyRecipeScreen} options={{headerShown:false}} />
-      <HomeStack.Screen name="SavedRecipe" component={SavedRecipeScreen} options={{headerShown:false}} />
-      <HomeStack.Screen name="LikedRecipe" component={LikedRecipeScreen} options={{headerShown:false}} />
-    </HomeStack.Navigator>
+    <ProfileStack.Navigator>
+      <ProfileStack.Group
+        screenOptions={{
+          headerTitle: '',
+          headerTransparent: true,
+          headerStyle: {
+            
+          }
+        }}
+      >
+
+        <ProfileStack.Screen name="MyProfile" component={ProfileScreen} options={{headerShown:false}} />
+        <ProfileStack.Screen name="EditProfile" component={EditProfileScreen} options={{headerShown:false}} />
+        <ProfileStack.Screen name="EditPhoto" component={EditPhotoScreen} options={{headerShown:false}} />
+        <ProfileStack.Screen name="EditPassword" component={EditPasswordScreen} options={{headerShown:false}} />
+        <ProfileStack.Screen name="MyRecipe" component={MyRecipeScreen} options={{headerShown:false}} />
+        <ProfileStack.Screen name="SavedRecipe" component={SavedRecipeScreen} options={{headerShown:false}} />
+        <ProfileStack.Screen name="LikedRecipe" component={LikedRecipeScreen} options={{headerShown:false}} />
+    
+        <ProfileStack.Screen name="DetailsRecipe" component={DetailResepScreen} />
+      </ProfileStack.Group>
+    </ProfileStack.Navigator>
   )
 }
 

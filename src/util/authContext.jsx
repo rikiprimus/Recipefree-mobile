@@ -7,10 +7,11 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isSigned, setIsSigned] = useState(false);
-  const [dataUser, setDataUser] = useState([]);
+  const [dataUser, setDataUser] = useState(null);
   const [message, setMessage] = useState('');
   const [email, setEmail] = useState('');
 
+  // delete message for 5 seconds 
   useEffect(() => {
     if (message !== '') {
       const timer = setTimeout(() => {
@@ -38,11 +39,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (data) => {
     const res = await authApi.login(data);
-    const user = await authApi.getUserData()
-    setDataUser(user)
-    console.log(res.status)
-    if(res.status === 200 && user !== null) {
-      setDataUser(data)
+    console.log(res.data)
+    if(res.status === 200) {
+      setDataUser(res.data)
       setIsSigned(true);
       console.log('login success')
     } else (
@@ -87,7 +86,6 @@ export const AuthProvider = ({ children }) => {
   
   const logout = async () => {
     const res = await authApi.logout();
-    console.log(res)
     if(res) {
       setIsSigned(false);
       console.log('logout success')
@@ -95,7 +93,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isSigned, login, logout, register, sendPin, confirmPin, changePassword, dataUser, message, email }}>
+    <AuthContext.Provider value={{ isSigned, login, logout, register, sendPin, confirmPin, changePassword, dataUser, setDataUser, message, email }}>
       {children}
     </AuthContext.Provider>
   );

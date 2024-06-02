@@ -10,24 +10,26 @@ import {
 import Pizza from "../../assets/pizza.jpg";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import axios from "axios";
+import { useAuth } from "../../util/authContext";
+import api from "../../util/api";
 
 const MyRecipeScreen = ({ navigation }) => {
-  const base_url = "https://recipefree.vercel.app";
+  const { dataUser } = useAuth();
   const [popular, setPopular] = useState([]);
-  async function getData() {
-    try {
-      let res = await axios.get(`${base_url}/recipes`);
-      console.log(res.data.data);
-      setPopular(res.data.data);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+
+  const getDataById = async () => {
+    const res = await api.getById("recipes/user", dataUser.id);
+    setPopular(res.data);
+  };
 
   useEffect(() => {
-    getData();
-    console.log("=======================");
-  });
+    getDataById();
+  }, [dataUser]);
+
+  const handleDelete = async (id) => {
+    await api.delete('recipes', id)
+    await getDataById()
+  }
 
   const renderSeparator = () => <View style={{ height: 25 }} />;
 
@@ -36,7 +38,9 @@ const MyRecipeScreen = ({ navigation }) => {
       <View className="w-full flex flex-row gap-x-4 justify-between items-center">
         <TouchableOpacity
           className="w-[270px] flex flex-row gap-x-4 items-center"
-          // onPress={() => navigation.navigate('DetailsRecipe')}
+          onPress={() => navigation.navigate("DetailsRecipe", {
+            id: item.id,
+          })}
         >
           <Image
             source={{ uri: item.photo }}
@@ -50,7 +54,7 @@ const MyRecipeScreen = ({ navigation }) => {
             </View>
           </View>
         </TouchableOpacity>
-        <View className='flex flex-col gap-y-2'>
+        <View className="flex flex-col gap-y-2">
           <TouchableOpacity
             className="flex items-center px-4 py-2 rounded-lg bg-[#30C0F3]"
             // onPress={} // Menggunakan handlePress yang sudah dimodifikasi
@@ -59,7 +63,7 @@ const MyRecipeScreen = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             className="flex items-center px-4 py-2 rounded-lg bg-[#F57E71]"
-            // onPress={} // Menggunakan handlePress yang sudah dimodifikasi
+            onPress={() => handleDelete(item.id)}
           >
             <Text className="text-base font-bold text-[#fff]">Delete</Text>
           </TouchableOpacity>
@@ -88,14 +92,22 @@ const MyRecipeScreen = ({ navigation }) => {
       </View>
       {/* file  */}
       <View className="w-full">
-        <FlatList
-          data={popular}
-          renderItem={renderPopular}
-          keyExtractor={(item, index) => index.toString()}
-          vertical
-          showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={renderSeparator}
-        />
+        {popular.length >= 1 ? (
+          <FlatList
+            data={popular}
+            renderItem={renderPopular}
+            keyExtractor={(item, index) => index.toString()}
+            vertical
+            showsHorizontalScrollIndicator={false}
+            ItemSeparatorComponent={renderSeparator}
+          />
+        ) : (
+          <View className="h-[500px] flex items-center justify-center">
+            <Text className="font-semibold text-lg text-yellow">
+              Kamu belum memiliki recipe...
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );

@@ -3,37 +3,31 @@ import api from './api';
 
 const useSearchData = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [dataSearch, setDataSearch] = useState([]);
+  const [resultSearch, setResultSearch] = useState([]);
   const [detailSearch, setDetailSearch] = useState({
-    searchBy: 'ingredient',
+    searchBy: 'title',
     search: '',
     sortBy: 'createdAt',
     sort: 'DESC',
     limit: '20',
     page: '1',
   });
-  // console.log(detailSearch.search)
-  // console.log(dataSearch)
+  console.log("hasil result : ", resultSearch)
   const fetchSearchData = async () => {
     try {
       const data = await api.getDetails('recipes', detailSearch);
-      // console.log(data)
-      setDataSearch(data.data);
+      console.log("hasil api :",data?.data)
+      setResultSearch(data?.data);
       setIsLoading(false)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
   useEffect(() => {
-
     fetchSearchData();
   }, [detailSearch]);
 
-  const updateSearchQuery = (newDetailSearch) => {
-    setDetailSearch(newDetailSearch);
-  };
-
-  return { dataSearch, detailSearch, updateSearchQuery, isLoading, setIsLoading };
+  return { resultSearch, setResultSearch, detailSearch, setDetailSearch, isLoading, setIsLoading, fetchSearchData };
 };
 
 export default useSearchData;

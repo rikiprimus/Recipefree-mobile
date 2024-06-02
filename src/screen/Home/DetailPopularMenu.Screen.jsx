@@ -29,14 +29,12 @@ const DetailPopularMenuScreen = ({ navigation }) => {
         const data = await api.get("recipes");
         setPopular(data.data);
         setIsLoading(false);
-        console.log(data.data);
       } catch (error) {
         console.error("Error fetching :", error);
       }
     };
 
     fetchData();
-    console.log("=======================");
   }, []);
 
   const renderSeparator = () => <View style={{ height: 25 }} />;

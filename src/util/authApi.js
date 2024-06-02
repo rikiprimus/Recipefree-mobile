@@ -106,7 +106,22 @@ const authApi = {
     } catch (error) {
       return null;
     }
+  },
+
+  getUserLogin: async (id, token) => {
+    try {
+      const res = await axios.get(apiUrl + `users/${id}`, credentials, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      return res.data
+    } catch (error) {
+      return error;
+    }
   }
+
+  
 };
 
 export default authApi;

@@ -6,31 +6,22 @@ import { useAuth } from '../../util/authContext';
 import authApi from '../../util/authApi'
 
 const ProfileScreen = ({navigation}) => {
-  const { logout } = useAuth()
-  const [userData, setUserData] = useState([])
+  const { logout, dataUser } = useAuth()
+  const [photo, setPhoto] = useState(null);
 
-  const fetchUser = async () => {
-    try {
-      const user = await authApi.getUserData()
-      setUserData(user.data)
-    } catch (error) {
-      console.error('Error fetching isSigned from AsyncStorage:', error);
-    }
-  };
-
-  useEffect (() => {
-    fetchUser()
-  }, [])
+  useEffect(() => {
+    setPhoto(dataUser?.photo_profile);
+  }, [dataUser]);
   const handleLogout = async () => {
     logout()
   }
 
   return (
     <View className="relative flex-1 items-center bg-white">
-        {userData && Object.keys(userData).length > 0 ? ( // Memeriksa apakah userData telah diisi
+        {photo !== null ? ( 
           <View className='w-full flex flex-col items-center justify-center gap-y-4 h-[400px] bg-yellow'>
-            <Image source={{uri: userData.photo_profile}} className='w-[90px] h-[90px] rounded-full' />
-            <Text className='font-semibold text-lg text-white'>{userData.name}</Text>
+            <Image source={{uri: photo}} className='w-[90px] h-[90px] rounded-full' />
+            <Text className='font-semibold text-lg text-white'>{dataUser?.name}</Text>
           </View>
         ) : null }
       <View className='absolute w-[405px] h-1/2 bottom-0 mx-7 p-6 bg-white rounded-t-2xl'>

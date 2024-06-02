@@ -12,61 +12,82 @@ import * as ImagePicker from "react-native-image-picker";
 import SelectDropdown from "react-native-select-dropdown";
 import Input from "../../components/Input";
 import ButtonY from "../../components/ButtonY";
-import api from "../../util/api";
 import { useAuth } from "../../util/authContext";
+import api from "../../util/api";
+import Alert from "../../components/Alert";
 
 const UploadRecipeScreen = ({ navigation }) => {
-  const { dataUser } = useAuth()
-  const [title, setTitle] = useState("");
-  const [photo, setPhoto] = useState();
-  const [ingredient, setIngredient] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [message, setMessage] = useState("")
-  
+  const { dataUser } = useAuth();
+  const [dataPhoto, setDataPhoto] = useState();
+  const [message, setMessage] = useState("");
+  const [formData, setFormData] = useState({
+    title: "",
+    ingredient: "",
+    category_id: "",
+    users_id: dataUser?.id || "",
+    photo: {
+      uri: "",
+      name: "",
+      type: "",
+    },
+  });
+  // console.log("photo", photo)
+  useEffect(() => {
+    if (message !== "") {
+      const timer = setTimeout(() => {
+        setMessage("");
+      }, 5000);
 
-  const uploadRecipe = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("ingredient", ingredient);
-      formData.append("category_id", categoryId);
-      formData.append("users_id", dataUser?.id);
-      formData.append("photo", {
-        uri: photo?.uri,
-        name: photo?.fileName,
-        type: photo?.type,
-      });
-
-      const res = await api.add("recipes", formData)
-      if(res?.status === 201) {
-        setTitle("")
-        setPhoto()
-        setIngredient("")
-        setCategoryId("")
-        setMessage(res?.message)
-        navigation.navigate('Main')
-      } else {
-        setMessage(res?.message)
-      }
-    } catch (error) {
-      console.error('Gagal membuat resep:', error);
+      return () => clearTimeout(timer);
     }
+  }, [message]);
+
+  const handleInputChange = (name, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    console.log(formData);
   };
 
-  const category = [
-    {
-      id: "ad3c939f-6976-4f7f-a477-619ee546c6fb",
-      name: "Main Course",
-    },
-    {
-      id: "f9f39283-a5c7-4d13-938e-5506b6fb2d8e",
-      name: "Dessert",
-    },
-    {
-      id: "3ef5ca5d-1b01-49c2-840f-a204502fb63d",
-      name: "Appetizer",
-    },
-  ];
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("title", formData.title);
+      formData.append("ingredient", formData.ingredient);
+      formData.append("category_id", formData.category_id);
+      formData.append("users_id", dataUser?.id);
+      formData.append("photo", {
+        uri: dataPhoto?.uri,
+        name: dataPhoto?.fileName,
+        type: dataPhoto?.type,
+      });
+      console.log(formData)
+      const res = await api.add("recipes", formData, dataUser?.token);
+  
+      if (res?.code === 201) {
+        setFormData({
+          title: "",
+          ingredient: "",
+          category_id: "",
+          users_id: dataUser?.id || "",
+          photo: {
+            uri: "",
+            name: "",
+            type: "",
+          },
+        });
+        setDataPhoto(null);
+        setMessage(res?.message);
+        navigation.navigate("Home");
+      } else {
+        setMessage(res?.message);
+      }
+    } catch (error) {
+      console.error("Gagal membuat resep:", error);
+    }
+  };
+  
 
   const requestPermission = async () => {
     try {
@@ -106,7 +127,15 @@ const UploadRecipeScreen = ({ navigation }) => {
         console.log("camera error", res.errorMessage);
       } else {
         console.log("camera success");
-        setPhoto(res.assets[0]);
+        setDataPhoto(res.assets[0]);
+        setFormData((prevData) => ({
+          ...prevData,
+          photo: {
+            uri: res.assets[0].uri,
+            name: res.assets[0].fileName,
+            type: res.assets[0].type,
+          },
+        }));
       }
     });
   };
@@ -125,8 +154,15 @@ const UploadRecipeScreen = ({ navigation }) => {
         console.log("gallery error", res.errorMessage);
       } else {
         console.log("gallery success");
-        console.log(res);
-        setPhoto(res.assets[0]);
+        setDataPhoto(res.assets[0]);
+        setFormData((prevData) => ({
+          ...prevData,
+          photo: {
+            uri: res.assets[0].uri,
+            name: res.assets[0].fileName,
+            type: res.assets[0].type,
+          },
+        }));
       }
     });
   };
@@ -136,18 +172,36 @@ const UploadRecipeScreen = ({ navigation }) => {
     cameraLaunch();
   };
 
+  const category = [
+    {
+      id: "ad3c939f-6976-4f7f-a477-619ee546c6fb",
+      name: "Main Course",
+    },
+    {
+      id: "f9f39283-a5c7-4d13-938e-5506b6fb2d8e",
+      name: "Dessert",
+    },
+    {
+      id: "3ef5ca5d-1b01-49c2-840f-a204502fb63d",
+      name: "Appetizer",
+    },
+  ];
+
   return (
     <View className="flex-1 items-center gap-y-6 pt-10 px-7 bg-white">
       <Text className="text-2xl font-semibold text-yellow">
         Add Your Recipe
       </Text>
+      <View>
+        <Alert message={message} />
+      </View>
       <ScrollView className="w-full flex flex-col gap-y-6">
         <View>
           <Input
             placeholder="Title"
             nameicon="book-outline"
-            value={title}
-            onChangeText={setTitle}
+            value={formData.title}
+            onChangeText={(value) => handleInputChange("title", value)}
           />
         </View>
         <TextInput
@@ -156,12 +210,12 @@ const UploadRecipeScreen = ({ navigation }) => {
           placeholder={`Ingredients`}
           className="w-full text-base flex flex-row items-start justify-start border-2 border-[#fff] p-4 rounded-lg bg-med-white focus:border-yellow"
           style={{ textAlignVertical: "top" }}
-          value={ingredient}
-          onChangeText={setIngredient}
+          value={formData.ingredient}
+          onChangeText={(value) => handleInputChange("ingredient", value)}
         />
-        {photo ? (
+        {dataPhoto ? (
           <View className="w-full flex items-center">
-            <Image source={{ uri: photo?.uri }} className="w-[80px] h-[50px]" />
+            <Image source={{ uri: dataPhoto?.uri }} className="w-[80px] h-[50px]" />
           </View>
         ) : null}
         {/* Button Add photo  */}
@@ -181,10 +235,9 @@ const UploadRecipeScreen = ({ navigation }) => {
         <View className="w-full bg-med-white rounded-lg">
           <SelectDropdown
             data={category}
-            onSelect={(selectedItem, index) => {
-              // console.log(selectedItem.id);
-              setCategoryId(selectedItem.id)
-            }}
+            onSelect={(selectedItem, index) =>
+              handleInputChange("category_id", selectedItem.id)
+            }
             renderButton={(selectedItem, isOpened) => {
               return (
                 <View>
@@ -206,7 +259,7 @@ const UploadRecipeScreen = ({ navigation }) => {
           />
         </View>
         <View>
-          <ButtonY onPress={() => uploadRecipe()}>POST</ButtonY>
+          <ButtonY onPress={handleSubmit}>POST</ButtonY>
         </View>
       </ScrollView>
     </View>

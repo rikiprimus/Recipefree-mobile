@@ -7,7 +7,7 @@ import { useAuth } from "../../util/authContext";
 import ButtonY from "../../components/ButtonY";
 
 const ResetPasswordScreen = ({ navigation }) => {
-  const { changePassword, message, email } = useAuth();
+  const { changePassword, email } = useAuth();
   const [data, setData] = useState({
     email: email,
     password: "",
