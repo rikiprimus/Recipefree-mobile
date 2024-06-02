@@ -107,38 +107,37 @@ npx react-native run-android
 <p align="center" display=flex>
    
 <table>
- 
   <tr>
-    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/gyjljcuj8zublbkvysfo.png" alt="Login" width=100%></td>
-    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/y6abbhysw2qgstc7nhiz.png" alt="Register" width=100%/></td>
-  </tr>
-   <tr>
     <td>Login Screen</td>
     <td>Register Screen</td>
   </tr>
   <tr>
-    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/qhwk6fzipn7vfsmjz836.png" alt="Forgot Password" width=100%></td>
-    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/tqbpb1hhjxugg9rihp7c.png" alt="Code" width=100%/></td>
+    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/gyjljcuj8zublbkvysfo.png" alt="Login" width=100%></td>
+    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/y6abbhysw2qgstc7nhiz.png" alt="Register" width=100%/></td>
   </tr>
    <tr>
     <td>Forgot Password</td>
     <td>Code Screen</td>
   </tr>
   <tr>
-    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/syjz9sanwjupz4ebaagz.png" alt="Change Password" width=100%></td>
-    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/efx1b9wsp1vqosoxwncx.png" alt="Home" width=100%/></td>
+    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/qhwk6fzipn7vfsmjz836.png" alt="Forgot Password" width=100%></td>
+    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/tqbpb1hhjxugg9rihp7c.png" alt="Code" width=100%/></td>
   </tr>
    <tr>
     <td>Change Password</td>
     <td>Home</td>
   </tr>
   <tr>
-    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/i2kq72lkju25cd9oz2gr.png" alt="Add Recipe" width=100%></td>
-    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/uv1qlbxv3nlv1dnnmsol.png" alt="Profile" width=100%/></td>
+    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/syjz9sanwjupz4ebaagz.png" alt="Change Password" width=100%></td>
+    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/efx1b9wsp1vqosoxwncx.png" alt="Home" width=100%/></td>
   </tr>
    <tr>
     <td>Add Recipe</td>
     <td>Profile</td>
+  </tr>
+  <tr>
+    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/i2kq72lkju25cd9oz2gr.png" alt="Add Recipe" width=100%></td>
+    <td><image src="https://res.cloudinary.com/da1ilmcj9/image/upload/v1717344917/SS%20mobile%20app/uv1qlbxv3nlv1dnnmsol.png" alt="Profile" width=100%/></td>
   </tr>
 </table>
       
