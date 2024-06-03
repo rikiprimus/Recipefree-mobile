@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { API_URL } from '@env';
 
-const apiUrl = 'https://recipefree.vercel.app'
+const apiUrl = API_URL;
 
 const api = {
   add: async (endpoint, formData) => {
