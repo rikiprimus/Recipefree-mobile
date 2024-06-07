@@ -162,6 +162,8 @@ Contributions are what make the open source community such an amazing place to b
 
 :rocket: [`Frontend Recipefree`](https://github.com/rikiprimus/Recipefree-mobile)
 
+:rocket: [`Web Service`](https://recipefree-i9ej68paa-rickys-projects-c02e7d75.vercel.app/)
+
 :rocket: [`Demo Recipefree (Download apk for install)`]
 
 <p align="right">(<a href="#top">back to top</a>)</p>
