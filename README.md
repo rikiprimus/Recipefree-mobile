@@ -144,7 +144,7 @@ npx react-native run-android
 </p>
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Contributing
+# Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -156,26 +156,21 @@ Contributions are what make the open source community such an amazing place to b
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Related Project
+# Related Project
 
-:rocket: [`Backend Recipefree`](https://github.com/Candra-Julius/Cafein-BackEnd)
+:rocket: [`Backend Recipefree`](https://github.com/rikiprimus/bookflight)
 
-:rocket: [`Frontend Recipefree`](https://github.com/NisrinaNataraharja/FE-Cafein)
+:rocket: [`Frontend Recipefree`](https://github.com/rikiprimus/Recipefree-mobile)
 
-:rocket: [`Web Service`](https://hire-job-app.herokuapp.com)
-
-:rocket: [`Demo Recipefree`](https://fe-cafein.vercel.app/)
+:rocket: [`Demo Recipefree (Download apk for install)`]
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Contributor
+# Contact
 
-<a href="https://github.com/fandipras7">Ricky Primus Saputra</a>
+Contributors names and contact info
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-## License
-
-Distributed under the [MIT](/LICENSE) License.
+* AUTHOR
+  * Ricky Primus Saputra [@RickyPrimusSaputra](https://github.com/rikiprimus)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
